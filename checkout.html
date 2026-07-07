@@ -156,6 +156,10 @@
             }
 
             const checkCartAndRender = () => {
+                if (window.ProsesCheckout && window.ProsesCheckout.orderPlaced) {
+                    return;
+                }
+
                 const items = Cart.items || [];
                 const user = Auth.getUserAktif();
 

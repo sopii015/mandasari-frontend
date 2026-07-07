@@ -3,8 +3,9 @@
  */
 
 const ProsesCheckout = {
+    orderPlaced: false,
     init: () => {
-        if (Cart.loaded && Cart.items.length === 0) {
+        if (Cart.loaded && Cart.items.length === 0 && !ProsesCheckout.orderPlaced) {
             Toast.show('Keranjang Anda masih kosong', 'warning');
             setTimeout(() => window.location.href = 'index.html', 2000);
         }
@@ -26,7 +27,7 @@ const ProsesCheckout = {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/checkout`, {
+            const response = await fetch(`${API_BASE_URL}/api/orders/checkout`, {
                 method: 'POST',
                 headers: Storage.getHeaders(),
                 body: JSON.stringify({
@@ -37,11 +38,19 @@ const ProsesCheckout = {
 
             const data = await response.json();
             if (response.ok && data.success) {
-                // Bersihkan keranjang lokal cache
-                await Cart.kosongkan();
+                // Proses sekunder setelah checkout dibungkus try-catch tersendiri
+                // agar jika gagal, alur utama checkout tetap dianggap sukses.
+                try {
+                    ProsesCheckout.orderPlaced = true;
+                    
+                    // Bersihkan keranjang lokal cache
+                    await Cart.kosongkan();
 
-                // Simpan URL WhatsApp ke session agar bisa dibuka oleh UI
-                sessionStorage.setItem('last_whatsapp_url', data.whatsappUrl);
+                    // Simpan URL WhatsApp ke session agar bisa dibuka oleh UI
+                    sessionStorage.setItem('last_whatsapp_url', data.whatsappUrl);
+                } catch (secondaryError) {
+                    console.warn("Proses sekunder setelah checkout gagal:", secondaryError);
+                }
 
                 return {
                     success: true,
