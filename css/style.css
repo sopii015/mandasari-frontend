@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ---- Custom Variables (Mandasari Palette) ---- */
+:root {
+    --bg-primary: #F9F6F0;    /* Cream */
+    --bg-secondary: #FFFFFF;  /* White */
+    --bg-tertiary: #EFE9D9;   /* Deep Cream */
+    --border: #D4AF37;        /* Gold (low opacity) */
+    --text-primary: #0A192F;  /* Navy */
+    --text-secondary: #64748B;/* Slate */
+    --accent: #C5A059;        /* Gold */
+    --accent-hover: #A68546;  /* Dark Gold */
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #E11D48;
+    --star: #FBBF24;
+    --radius-premium: 24px;
+}
+
+/* ---- Global Styles ---- */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Elegant Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+/* ---- Animations (Smooth & Soft) ---- */
+@keyframes revealUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes toastSlide {
+    from { transform: translateX(100%) scale(0.9); opacity: 0; }
+    to { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+.animate-reveal { animation: revealUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.animate-float { animation: float 4s ease-in-out infinite; }
+
+/* ---- Premium Product Card ---- */
+.product-card {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-premium);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(10, 25, 47, 0.08);
+}
+
+.product-card .img-container {
+    overflow: hidden;
+    border-radius: calc(var(--radius-premium) - 8px);
+}
+
+.product-card img {
+    transition: transform 0.7s scale(1.05);
+}
+
+.product-card:hover img {
+    transform: scale(1.12);
+}
+
+/* ---- Toast Notification (Mandasari Style) ---- */
+.toast-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: var(--text-primary);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    min-width: 280px;
+    animation: toastSlide 0.5s forwards;
+    border-left: 4px solid var(--accent);
+}
+
+/* ---- Inputs & Forms ---- */
+.form-input {
+    background: var(--bg-secondary);
+    border: 1.5px solid var(--bg-tertiary);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1);
+    outline: none;
+}
+
+/* ---- Buttons ---- */
+.btn-gold {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-gold:hover {
+    background: var(--accent-hover);
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(197, 160, 89, 0.3);
+}
+
+/* ---- Cart & Wishlist Badges ---- */
+#cart-badge {
+    background: var(--danger);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 99px;
+    border: 2px solid var(--bg-secondary);
+}
+
+/* ---- Empty State Styling ---- */
+.empty-state-box {
+    background: var(--bg-secondary);
+    border: 2px dashed var(--bg-tertiary);
+    border-radius: var(--radius-premium);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+/* ---- Background Decor (Mandasari Pattern) ---- */
+.bg-mandasari-pattern {
+    background-image: radial-gradient(var(--accent) 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
+    opacity: 0.1;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* ---- Typography ---- */
+.font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+h1, h2, h3 {
+    letter-spacing: -0.02em;
+}
+
+/* ---- Glassmorphism UI ---- */
+.glass-nav {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}

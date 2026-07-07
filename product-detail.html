@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="w-full py-5 px-6 md:px-12 border-b border-mandasari-gold/10 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl font-black tracking-tight">
+                Mandasari <span class="text-mandasari-gold">Kue.</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="cart.html" class="relative hover:text-mandasari-gold transition-colors">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-mandasari-gold text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
+                </a>
+                <a href="login.html" class="hover:text-mandasari-gold transition-colors">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-8 pb-24 px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        
+        <nav class="flex items-center gap-2 text-sm text-slate-400 mb-10 font-medium">
+            <a href="index.html" class="hover:text-mandasari-gold transition-colors">Beranda</a>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <a href="products.html" class="hover:text-mandasari-gold transition-colors">Katalog Kue</a>
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            <span class="text-mandasari-navy font-bold" id="bc-category">...</span>
+        </nav>
+
+        <div id="product-container" class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+            <div class="animate-pulse aspect-square bg-white rounded-[2.5rem] border border-mandasari-gold/10"></div>
+            <div class="space-y-8">
+                <div class="h-4 bg-slate-200 w-1/4 rounded-full animate-pulse"></div>
+                <div class="h-12 bg-slate-200 w-3/4 rounded-xl animate-pulse"></div>
+                <div class="h-6 bg-slate-200 w-1/3 rounded-lg animate-pulse"></div>
+                <div class="h-32 bg-slate-200 w-full rounded-2xl animate-pulse"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+
+    <script>
+        // Memastikan icon ter-render
+        lucide.createIcons();
+
+        let currentProduct = null;
+        let selectedQty = 1;
+
+        // Menggunakan event 'katalog-siap' yang ada di products.js kamu
+        window.addEventListener('katalog-siap', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+
+            if (!productId) {
+                window.location.href = 'products.html';
+                return;
+            }
+
+            // Mengambil data dari objek KatalogMandasari yang sudah kita perbaiki
+            currentProduct = KatalogMandasari.ambilBerdasarkanId(productId);
+
+            if (!currentProduct) {
+                document.getElementById('product-container').innerHTML = `
+                    <div class="col-span-full py-20 text-center">
+                        <h2 class="text-3xl font-serif font-bold mb-4 text-mandasari-navy">Kue tidak ditemukan</h2>
+                        <a href="products.html" class="text-mandasari-gold hover:underline font-bold">Kembali ke Katalog</a>
+                    </div>`;
+                return;
+            }
+
+            renderProduct();
+        });
+
+        const renderProduct = () => {
+            document.getElementById('bc-category').textContent = currentProduct.category || 'Kue';
+
+            const hasDiscount = currentProduct.discount > 0;
+            const discountedPrice = hasDiscount ? currentProduct.price - (currentProduct.price * (currentProduct.discount / 100)) : currentProduct.price;
+            
+            const formatIDR = (angka) => new Intl.NumberFormat('id-ID', { 
+                style: 'currency', 
+                currency: 'IDR', 
+                minimumFractionDigits: 0 
+            }).format(angka);
+
+            const container = document.getElementById('product-container');
+            container.innerHTML = `
+                <div class="relative bg-white rounded-[3rem] p-8 md:p-12 border border-mandasari-gold/5 shadow-xl shadow-mandasari-navy/5 overflow-hidden group">
+                    ${hasDiscount ? `
+                        <div class="absolute top-8 left-8 bg-rose-500 text-white font-bold text-xs px-4 py-2 rounded-full z-10 shadow-lg animate-bounce">
+                            DISKON ${currentProduct.discount}%
+                        </div>
+                    ` : ''}
+                    <img src="${currentProduct.image}" alt="${currentProduct.name}" 
+                         class="w-full h-auto object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700"
+                         onerror="this.src='https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=500'">
+                </div>
+
+                <div class="flex flex-col h-full pt-4">
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center gap-3">
+                            <span class="text-mandasari-gold font-bold text-xs uppercase tracking-[0.2em] bg-mandasari-gold/10 px-3 py-1 rounded-full">
+                                Premium Collection
+                            </span>
+                        </div>
+                        
+                        <h1 class="font-serif text-5xl md:text-6xl font-bold leading-tight text-mandasari-navy">
+                            ${currentProduct.name}
+                        </h1>
+
+                        <div class="flex items-center gap-6">
+                            <div class="flex items-center gap-1 text-amber-400">
+                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                                <span class="text-mandasari-navy font-bold text-lg mt-0.5">${currentProduct.rating || '5.0'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-10">
+                        <div class="flex items-center gap-4 mb-4">
+                            <span class="text-4xl font-bold text-mandasari-navy">
+                                ${formatIDR(discountedPrice)}
+                            </span>
+                            ${hasDiscount ? `
+                                <span class="text-xl text-slate-300 line-through decoration-rose-400 decoration-2">
+                                    ${formatIDR(currentProduct.price)}
+                                </span>
+                            ` : ''}
+                        </div>
+                        <p class="text-slate-500 leading-relaxed text-lg max-w-lg">
+                            ${currentProduct.description || 'Nikmati kelezatan kue premium buatan Mandasari.'}
+                        </p>
+                    </div>
+
+                    <div class="space-y-8 mt-auto">
+                        <div class="flex items-center gap-8">
+                            <span class="font-bold text-sm text-mandasari-navy uppercase tracking-widest">Jumlah</span>
+                            <div class="flex items-center bg-white rounded-2xl p-1.5 border border-mandasari-gold/20 shadow-sm">
+                                <button onclick="updateQty(-1)" class="w-12 h-12 flex items-center justify-center hover:bg-mandasari-cream rounded-xl transition-colors text-mandasari-navy" id="btn-minus">
+                                    <i data-lucide="minus" class="w-5 h-5"></i>
+                                </button>
+                                <span class="w-14 text-center font-bold text-xl" id="qty-display">1</span>
+                                <button onclick="updateQty(1)" class="w-12 h-12 flex items-center justify-center hover:bg-mandasari-cream rounded-xl transition-colors text-mandasari-navy" id="btn-plus">
+                                    <i data-lucide="plus" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <button onclick="handleAddToCart()" 
+                                class="flex-grow bg-mandasari-navy text-white font-bold py-5 px-8 rounded-2xl text-lg flex justify-center items-center gap-3 hover:bg-slate-800 transition-all shadow-xl shadow-mandasari-navy/20 active:scale-95">
+                                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                                Tambahkan ke Keranjang
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        };
+
+        window.updateQty = (change) => {
+            const newQty = selectedQty + change;
+            if (newQty >= 1) {
+                selectedQty = newQty;
+                document.getElementById('qty-display').textContent = selectedQty;
+            }
+        };
+
+        window.handleAddToCart = () => {
+    if (!currentProduct) return;
+
+    if (!Auth.isLoggedIn()) {
+        if (window.Toast) {
+            Toast.show('Silahkan login terlebih dahulu untuk belanja!', 'warning');
+        }
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
+        return;
+    }
+
+    if (window.KeranjangMandasari) {
+        KeranjangMandasari.tambahProduk(currentProduct, selectedQty);
+        if (window.Toast) Toast.show('Berhasil dimasukkan ke keranjang', 'success');
+    } else if (window.Cart) {
+        Cart.add(currentProduct, selectedQty);
+        if (window.Toast) Toast.show('Berhasil dimasukkan ke keranjang', 'success');
+    }
+};
+    </script>
+</body>
+</html>

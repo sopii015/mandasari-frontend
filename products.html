@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Produk | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav id="navbar" class="fixed w-full top-0 z-50 py-5 px-6 md:px-12 bg-white/80 backdrop-blur-md border-b border-mandasari-gold/10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl font-black tracking-tight z-50">
+                Mandasari <span class="text-mandasari-gold">Kue.</span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-10 text-sm font-bold uppercase tracking-widest">
+                <a href="index.html" class="hover:text-mandasari-gold transition-colors">Beranda</a>
+                <a href="products.html" class="text-mandasari-gold underline underline-offset-8">Katalog</a>
+                <a href="wishlist.html" class="hover:text-mandasari-gold transition-colors">Wishlist</a>
+            </div>
+
+            <div class="flex items-center space-x-6">
+  <a href="cart.html" class="hover:text-mandasari-gold transition-colors relative">
+    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+    <span id="cart-badge" class="absolute -top-2 -right-2 bg-mandasari-gold text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
+  </a>
+
+  <!-- Tampil kalau BELUM login -->
+  <div id="auth-buttons-group" class="flex items-center">
+    <a href="login.html" class="hover:text-mandasari-gold transition-colors">
+      <i data-lucide="user" class="w-6 h-6"></i>
+    </a>
+  </div>
+
+  <!-- Tampil kalau SUDAH login -->
+  <div id="user-profile-dropdown" class="hidden dropdown-container relative">
+    <button class="dropdown-trigger flex items-center gap-2 text-sm font-bold cursor-pointer">
+      <i data-lucide="user-circle" class="w-6 h-6 text-mandasari-gold"></i>
+      <span id="display-user-name"></span>
+      <i data-lucide="chevron-down" class="w-4 h-4"></i>
+    </button>
+    <div class="dropdown-content absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-1 opacity-0 invisible translate-y-2 transition-all duration-300 origin-top-right z-50">
+      <a href="orders.html" class="block px-4 py-3 text-sm font-semibold hover:bg-mandasari-cream border-b border-slate-50">Riwayat Pesanan</a>
+      <a href="wishlist.html" class="block px-4 py-3 text-sm font-semibold hover:bg-mandasari-cream border-b border-slate-50">Wishlist Saya</a>
+      <a href="#" class="action-logout block px-4 py-3 text-sm font-semibold text-red-500 hover:bg-mandasari-cream">Keluar</a>
+    </div>
+  </div>
+</div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-32 pb-16 px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        
+        <div class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-mandasari-gold/20 pb-8">
+            <div class="space-y-2">
+                <nav class="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">
+                    <a href="index.html">Beranda</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-mandasari-gold">Katalog</span>
+                </nav>
+                <h1 class="font-serif text-4xl md:text-5xl font-bold tracking-tight">Koleksi <span class="italic text-mandasari-gold">Terbaik</span> Kami</h1>
+            </div>
+            <div class="text-slate-500 text-sm font-medium italic" id="result-count">
+                Memuat produk...
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-12">
+            
+            <aside class="w-full lg:w-72 flex-none space-y-10">
+                <div class="space-y-4">
+                    <h3 class="font-bold text-xs uppercase tracking-[0.2em] text-mandasari-navy">Cari Produk</h3>
+                    <div class="relative group">
+                        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-mandasari-gold transition-colors"></i>
+                        <input type="text" id="search-input" placeholder="Contoh: Nastar..." 
+                            class="w-full bg-white border border-mandasari-gold/20 rounded-2xl py-3.5 pl-12 pr-4 text-sm focus:border-mandasari-gold focus:ring-0 transition-all outline-none shadow-sm">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-xs uppercase tracking-[0.2em] text-mandasari-navy">Kategori</h3>
+                    <div class="flex flex-wrap lg:flex-col gap-3" id="category-filters">
+                        </div>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="font-bold text-xs uppercase tracking-[0.2em] text-mandasari-navy">Urutkan</h3>
+                    <div class="relative">
+                        <select id="sort-select" class="w-full bg-white border border-mandasari-gold/20 rounded-2xl py-3.5 px-4 text-sm focus:border-mandasari-gold appearance-none outline-none shadow-sm cursor-pointer">
+                            <option value="newest">Terbaru</option>
+                            <option value="price-low">Harga: Rendah ke Tinggi</option>
+                            <option value="price-high">Harga: Tinggi ke Rendah</option>
+                            <option value="rating">Rating Tertinggi</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="flex-grow">
+                <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <div class="animate-pulse bg-white h-80 rounded-[2rem] border border-mandasari-gold/10"></div>
+                    <div class="animate-pulse bg-white h-80 rounded-[2rem] border border-mandasari-gold/10"></div>
+                    <div class="animate-pulse bg-white h-80 rounded-[2rem] border border-mandasari-gold/10"></div>
+                </div>
+                
+                <div class="mt-16 flex justify-center items-center gap-3" id="pagination"></div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+    lucide.createIcons();
+
+    const state = {
+        search: '',
+        categories: [], 
+        sortBy: 'newest',
+        page: 1,
+        perPage: 6
+    };
+
+    const formatIDR = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+
+    window.addEventListener('katalog-siap', () => {
+        renderFilters();
+        updateProducts();
+    });
+
+    const renderFilters = () => {
+        if (!KatalogMandasari.semuaProduk) return;
+        
+        const categories = [...new Set(KatalogMandasari.semuaProduk.map(p => p.category))];
+        const filterContainer = document.getElementById('category-filters');
+        
+        filterContainer.innerHTML = categories.map(cat => `
+            <button onclick="toggleCategory('${cat}')" 
+                class="category-btn px-5 py-2.5 rounded-full border text-[10px] font-bold uppercase tracking-widest transition-all
+                ${state.categories.includes(cat) ? 'bg-mandasari-gold border-mandasari-gold text-white shadow-lg' : 'bg-white border-mandasari-gold/20 text-slate-500 hover:border-mandasari-gold hover:text-mandasari-gold'}">
+                ${cat}
+            </button>
+        `).join('');
+    };
+
+    window.toggleCategory = (cat) => {
+        if (state.categories.includes(cat)) {
+            state.categories = [];
+        } else {
+            state.categories = [cat];
+        }
+        
+        state.page = 1;
+        renderFilters();
+        updateProducts();
+    };
+
+    const updateProducts = () => {
+        let filtered = [...KatalogMandasari.semuaProduk];
+
+        if (state.search) {
+            filtered = filtered.filter(p => p.name.toLowerCase().includes(state.search.toLowerCase()));
+        }
+
+        if (state.categories.length > 0) {
+            filtered = filtered.filter(p => state.categories.includes(p.category));
+        }
+
+        if (state.sortBy === 'price-low') filtered.sort((a, b) => a.price - b.price);
+        if (state.sortBy === 'price-high') filtered.sort((a, b) => b.price - a.price);
+        if (state.sortBy === 'rating') filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        if (state.sortBy === 'newest') filtered.sort((a, b) => b.id - a.id);
+
+        renderProductsUI(filtered);
+    };
+
+    const renderProductsUI = (productsToRender) => {
+        const grid = document.getElementById('products-grid');
+        const resultCount = document.getElementById('result-count');
+        
+        if (productsToRender.length === 0) {
+            grid.innerHTML = `
+                <div class="col-span-full py-24 text-center bg-white rounded-[3rem] border border-dashed border-mandasari-gold/30">
+                    <i data-lucide="cookie" class="w-16 h-16 text-slate-200 mb-6 mx-auto"></i>
+                    <h3 class="font-serif text-2xl font-bold mb-2">Kue tidak ditemukan</h3>
+                    <p class="text-slate-400 mb-8">Coba gunakan kata kunci lain.</p>
+                    <button onclick="resetFilters()" class="bg-mandasari-navy text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all">Bersihkan Filter</button>
+                </div>
+            `;
+            document.getElementById('pagination').innerHTML = '';
+            resultCount.textContent = '0 kue ditemukan';
+            lucide.createIcons();
+            return;
+        }
+
+        const totalPages = Math.ceil(productsToRender.length / state.perPage);
+        const startIdx = (state.page - 1) * state.perPage;
+        const endIdx = startIdx + state.perPage;
+        const paginatedProducts = productsToRender.slice(startIdx, endIdx);
+
+        grid.innerHTML = paginatedProducts.map(p => `
+    <div class="group bg-white rounded-[2.5rem] p-6 border border-mandasari-gold/5 shadow-sm hover:shadow-2xl hover:shadow-mandasari-navy/5 transition-all duration-500 relative overflow-hidden flex flex-col h-full">
+        <div class="aspect-square rounded-[2rem] bg-mandasari-cream/50 mb-6 overflow-hidden relative">
+            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700" onerror="this.src='https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=500'">
+            <a href="product-detail.html?id=${p.id}" class="absolute inset-0 z-10"></a>
+
+            <button onclick="event.preventDefault(); KatalogMandasari.handleAksi(${p.id}, 'Wishlist')" 
+                    class="absolute top-4 right-4 w-11 h-11 bg-white/90 backdrop-blur-md rounded-2xl flex items-center justify-center z-20 shadow-lg active:scale-90 transition-all ${window.Wishlist && Wishlist.apakahFavorit(p.id) ? 'text-rose-500' : 'text-slate-400 hover:text-rose-500'}">
+                <i data-lucide="heart" class="w-5 h-5 ${window.Wishlist && Wishlist.apakahFavorit(p.id) ? 'fill-current' : ''}"></i>
+            </button>
+
+            <button onclick="event.preventDefault(); KatalogMandasari.handleAksi(${p.id}, 'Keranjang')" 
+                    class="absolute bottom-4 right-4 w-12 h-12 bg-mandasari-navy text-white rounded-2xl flex items-center justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20 shadow-xl shadow-mandasari-navy/20 active:scale-90">
+                <i data-lucide="plus" class="w-6 h-6"></i>
+            </button>
+        </div>
+                <div class="space-y-3 flex-grow">
+                    <div class="flex justify-between items-start">
+                        <span class="text-[10px] font-black uppercase tracking-[0.2em] text-mandasari-gold">${p.category}</span>
+                        <div class="flex items-center gap-1 text-amber-400 font-bold text-xs">
+                            <i data-lucide="star" class="w-3 h-3 fill-current"></i> ${p.rating || '5.0'}
+                        </div>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold group-hover:text-mandasari-gold transition-colors line-clamp-1">
+                        <a href="product-detail.html?id=${p.id}">${p.name}</a>
+                    </h3>
+                    <p class="text-mandasari-navy font-bold text-lg">${formatIDR(p.price)}</p>
+                </div>
+            </div>
+        `).join('');
+        
+        renderPagination(totalPages);
+        resultCount.textContent = `Menampilkan ${startIdx + 1}-${Math.min(endIdx, productsToRender.length)} dari ${productsToRender.length} kue`;
+        lucide.createIcons();
+    };
+
+    const renderPagination = (totalPages) => {
+        const pagContainer = document.getElementById('pagination');
+        if (totalPages <= 1) {
+            pagContainer.innerHTML = '';
+            return;
+        }
+
+        let html = `
+            <button onclick="goToPage(${state.page - 1})" class="w-12 h-12 flex items-center justify-center rounded-2xl border border-mandasari-gold/20 bg-white text-mandasari-navy hover:bg-mandasari-navy hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none" ${state.page === 1 ? 'disabled' : ''}>
+                <i data-lucide="chevron-left" class="w-5 h-5"></i>
+            </button>
+        `;
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `
+                <button onclick="goToPage(${i})" class="w-12 h-12 flex items-center justify-center rounded-2xl font-bold transition-all ${state.page === i ? 'bg-mandasari-gold text-white shadow-lg' : 'bg-white border border-mandasari-gold/20 text-slate-400 hover:border-mandasari-gold hover:text-mandasari-gold'}">
+                    ${i}
+                </button>
+            `;
+        }
+
+        html += `
+            <button onclick="goToPage(${state.page + 1})" class="w-12 h-12 flex items-center justify-center rounded-2xl border border-mandasari-gold/20 bg-white text-mandasari-navy hover:bg-mandasari-navy hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none" ${state.page === totalPages ? 'disabled' : ''}>
+                <i data-lucide="chevron-right" class="w-5 h-5"></i>
+            </button>
+        `;
+
+        pagContainer.innerHTML = html;
+    };
+
+    window.goToPage = (page) => {
+        state.page = page;
+        updateProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.resetFilters = () => {
+        state.search = '';
+        state.categories = [];
+        state.page = 1;
+        document.getElementById('search-input').value = '';
+        renderFilters();
+        updateProducts();
+    };
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+        state.search = e.target.value;
+        state.page = 1;
+        updateProducts();
+    });
+
+    document.getElementById('sort-select').addEventListener('change', (e) => {
+        state.sortBy = e.target.value;
+        state.page = 1;
+        updateProducts();
+    });
+</script>
+</body>
+</html>

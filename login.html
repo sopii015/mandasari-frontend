@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex items-center justify-center p-6">
+    
+    <div class="fixed inset-0 z-0 opacity-20 pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-mandasari-gold blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-mandasari-navy blur-[120px]"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-white/90 backdrop-blur-xl border border-white rounded-[2rem] p-10 shadow-2xl relative z-10 animate-scale-in">
+        <div class="text-center mb-10">
+            <a href="index.html" class="inline-flex items-center justify-center gap-2 font-serif text-3xl font-black tracking-tight mb-4">
+                Mandasari <span class="text-mandasari-gold">Kue.</span>
+            </a>
+            <h1 class="text-2xl font-bold tracking-tight">Selamat Datang</h1>
+            <p class="text-slate-500 text-sm mt-2">Silakan masuk untuk melanjutkan pesanan Anda</p>
+        </div>
+
+        <form id="login-form" class="space-y-6">
+            <div>
+                <label for="email" class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2 ml-1">Alamat Email</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                    </div>
+                    <input type="email" id="email" name="email" required
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-mandasari-gold/20 focus:border-mandasari-gold focus:bg-white transition-all outline-none"
+                        placeholder="nama@email.com">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-center mb-2 ml-1">
+                    <label for="password" class="block text-xs font-bold uppercase tracking-widest text-slate-400">Kata Sandi</label>
+                    <a href="#" class="text-xs text-mandasari-gold font-semibold hover:underline">Lupa sandi?</a>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                    </div>
+                    <input type="password" id="password" name="password" required
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-mandasari-gold/20 focus:border-mandasari-gold focus:bg-white transition-all outline-none"
+                        placeholder="••••••••">
+                    <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-mandasari-navy">
+                        <i data-lucide="eye" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center ml-1">
+                <input type="checkbox" id="remember" class="w-4 h-4 rounded border-slate-300 text-mandasari-navy focus:ring-mandasari-gold">
+                <label for="remember" class="ml-2 text-sm text-slate-500 font-medium">Ingat saya</label>
+            </div>
+
+            <button type="submit" class="w-full bg-mandasari-navy text-white font-bold py-4 rounded-2xl shadow-xl shadow-mandasari-navy/20 hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] transition-all flex justify-center items-center gap-3 group">
+                Masuk Sekarang
+                <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </form>
+
+        <div class="mt-10 text-center text-sm text-slate-500">
+            Belum punya akun? 
+            <a href="register.html" class="text-mandasari-gold font-bold hover:underline">Daftar sekarang</a>
+        </div>
+
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/products.js"></script> <script src="js/cart.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        lucide.createIcons();
+
+        // Redirect jika sudah login
+        if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+            window.location.href = 'index.html';
+        }
+
+        // Toggle visibilitas password
+        const toggleBtn = document.getElementById('toggle-password');
+        const passInput = document.getElementById('password');
+        
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passInput.getAttribute('type') === 'password';
+            passInput.setAttribute('type', isPassword ? 'text' : 'password');
+            
+            toggleBtn.innerHTML = isPassword ? 
+                '<i data-lucide="eye-off" class="w-5 h-5"></i>' : 
+                '<i data-lucide="eye" class="w-5 h-5"></i>';
+            lucide.createIcons();
+        });
+
+        // Handler pengiriman formulir
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = this.querySelector('button[type="submit"]');
+            
+            // Efek Loading
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Memproses...';
+            lucide.createIcons();
+            btn.disabled = true;
+
+            try {
+                if (typeof Auth !== 'undefined') {
+                    const result = await Auth.login(email, password);
+                    
+                    if (result.success) {
+                        if (typeof Toast !== 'undefined') Toast.show(result.message, 'success');
+                        setTimeout(() => {
+                            const user = Auth.getUserAktif();
+                            window.location.href = user && user.role === 'admin' ? 'admin.html' : 'index.html';
+                        }, 1000);
+                    } else {
+                        if (typeof Toast !== 'undefined') Toast.show(result.message, 'error');
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                        lucide.createIcons();
+                    }
+                } else {
+                    console.error("Auth.js tidak ditemukan!");
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                }
+            } catch (err) {
+                if (typeof Toast !== 'undefined') Toast.show('Gagal menghubungi server.', 'error');
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorit Saya | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="w-full py-5 px-6 md:px-12 border-b border-mandasari-gold/10 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl font-black tracking-tighter">
+                Mandasari<span class="text-mandasari-gold">.</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="products.html" class="hidden md:block text-xs font-bold uppercase tracking-widest hover:text-mandasari-gold transition-all">Lanjut Belanja</a>
+                
+                <a href="cart.html" class="relative group p-2">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 group-hover:text-mandasari-gold transition-colors"></i>
+                    <span id="cart-badge" class="absolute top-0 right-0 bg-mandasari-gold text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white hidden">0</span>
+                </a>
+
+                <div class="md:hidden relative group">
+                    <button class="p-2 border border-mandasari-gold/20 rounded-full">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <div class="absolute right-0 mt-3 w-48 bg-white border border-mandasari-gold/10 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all py-2 overflow-hidden">
+                        <a href="index.html" class="block px-5 py-3 text-sm hover:bg-mandasari-cream">Beranda</a>
+                        <a href="products.html" class="block px-5 py-3 text-sm hover:bg-mandasari-cream">Katalog</a>
+                        <a href="orders.html" class="block px-5 py-3 text-sm hover:bg-mandasari-cream border-b">Pesanan</a>
+                        <a href="#" id="logout-btn" class="block px-5 py-3 text-sm text-red-500 hover:bg-red-50">Keluar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow py-16 px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+            <div class="space-y-2">
+                <h1 class="font-serif text-4xl font-bold tracking-tight">Kue <span class="text-mandasari-gold italic">Impian</span> Anda</h1>
+                <p class="text-slate-500 text-sm font-medium">Daftar camilan pilihan yang ingin Anda nikmati nanti.</p>
+            </div>
+            <div id="wishlist-count" class="text-xs font-black uppercase tracking-widest text-slate-400 bg-white px-4 py-2 rounded-full border border-mandasari-gold/10">
+                0 Item
+            </div>
+        </div>
+
+        <div id="wishlist-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            </div>
+
+    </main>
+
+    <footer class="py-10 text-center border-t border-mandasari-gold/10 text-slate-400 text-xs font-medium uppercase tracking-[0.2em]">
+        &copy; 2026 Toko Kue Mandasari Premium
+    </footer>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        // Cek login
+        Auth.requireLogin();
+
+       const renderWishlist = () => {
+            const grid = document.getElementById('wishlist-grid');
+            const countLabel = document.getElementById('wishlist-count');
+    
+            if (KatalogMandasari.semuaProduk.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-20 text-center">
+                        <div class="w-12 h-12 border-4 border-mandasari-gold/20 border-t-mandasari-gold rounded-full animate-spin mx-auto"></div>
+                    </div>`;
+                return;
+            }
+
+            const items = Wishlist.getItems();
+            countLabel.textContent = `${items.length} Item`;
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white border border-mandasari-gold/10 rounded-[3rem] p-16 text-center shadow-sm">
+                        <div class="w-20 h-20 bg-mandasari-cream rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="heart-off" class="w-10 h-10 text-mandasari-gold/40"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl font-bold mb-3 text-mandasari-navy">Belum ada favorit?</h3>
+                        <p class="text-slate-400 mb-8 max-w-xs mx-auto">Jelajahi koleksi kue kami dan simpan yang paling menggugah selera Anda.</p>
+                        <a href="products.html" class="inline-block bg-mandasari-navy text-white font-bold px-10 py-4 rounded-2xl hover:bg-slate-800 transition-all shadow-xl shadow-mandasari-navy/20">
+                            Mulai Menjelajah
+                        </a>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Custom Card Render for Wishlist
+            grid.innerHTML = items.map(p => `
+                <div class="group bg-white rounded-[2rem] p-5 border border-mandasari-gold/5 shadow-sm hover:shadow-xl transition-all duration-500 relative">
+                    <div class="aspect-square rounded-2xl bg-mandasari-cream/50 mb-4 overflow-hidden relative">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700">
+                        
+                        <button onclick="Wishlist.toggle(${p.id})" class="absolute top-3 right-3 w-10 h-10 bg-white text-red-500 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-all active:scale-90">
+                            <i data-lucide="heart" class="w-5 h-5 fill-current"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-mandasari-gold">${p.category}</span>
+                            <div class="flex items-center gap-1 text-amber-400 font-bold text-[10px]">
+                                <i data-lucide="star" class="w-3 h-3 fill-current"></i> ${p.rating}
+                            </div>
+                        </div>
+                        <h3 class="font-serif text-lg font-bold line-clamp-1">${p.name}</h3>
+                        <div class="flex items-center justify-between pt-2">
+                            <p class="text-mandasari-navy font-bold">${Cart.formatCurrency(p.price)}</p>
+                            <button onclick="Cart.addById(${p.id}, 1)" class="p-2.5 bg-mandasari-navy text-white rounded-xl hover:bg-mandasari-gold transition-colors">
+                                <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        };
+
+        window.addEventListener('katalog-siap', renderWishlist);
+        window.addEventListener('wishlist-updated', renderWishlist);
+
+        // Jaga-jaga kalau katalog sudah lebih dulu selesai loading sebelum listener ini terpasang
+        if (KatalogMandasari.semuaProduk.length > 0) renderWishlist();
+    </script>
+</body>
+</html>

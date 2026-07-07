@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Member | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex items-center justify-center p-4">
+    
+    <div class="fixed inset-0 opacity-5 pointer-events-none overflow-hidden">
+        <i data-lucide="utensils" class="absolute top-10 left-10 w-32 h-32 rotate-12"></i>
+        <i data-lucide="cake" class="absolute bottom-20 right-10 w-40 h-40 -rotate-12"></i>
+    </div>
+
+    <div class="w-full max-w-[450px] bg-white border border-mandasari-gold/20 rounded-[2.5rem] p-8 md:p-10 shadow-xl relative z-10">
+        <div class="text-center mb-10">
+            <a href="index.html" class="font-serif text-3xl font-black tracking-tighter mb-4 block">
+                Mandasari <span class="text-mandasari-gold text-4xl">.</span>
+            </a>
+            <h1 class="text-2xl font-bold tracking-tight">Bergabunglah Sekarang</h1>
+            <p class="text-slate-400 text-sm mt-2 font-medium">Nikmati kelezatan kue premium setiap hari</p>
+        </div>
+
+        <form id="register-form" class="space-y-6">
+            <div class="space-y-1.5">
+                <label for="name" class="block text-[11px] uppercase tracking-widest font-black text-mandasari-gold ml-1">Nama Lengkap</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-mandasari-gold transition-colors">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </div>
+                    <input type="text" id="name" name="name" required
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 focus:bg-white focus:border-mandasari-gold focus:ring-0 transition-all outline-none text-sm"
+                        placeholder="Masukkan nama Anda">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label for="email" class="block text-[11px] uppercase tracking-widest font-black text-mandasari-gold ml-1">Email</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-mandasari-gold transition-colors">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                    </div>
+                    <input type="email" id="email" name="email" required
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 focus:bg-white focus:border-mandasari-gold focus:ring-0 transition-all outline-none text-sm"
+                        placeholder="contoh@mail.com">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label for="password" class="block text-[11px] uppercase tracking-widest font-black text-mandasari-gold ml-1">Password</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-mandasari-gold transition-colors">
+                        <i data-lucide="lock" class="w-5 h-5"></i>
+                    </div>
+                    <input type="password" id="password" name="password" required minlength="6"
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 focus:bg-white focus:border-mandasari-gold focus:ring-0 transition-all outline-none text-sm"
+                        placeholder="Min. 6 karakter">
+                </div>
+            </div>
+            
+            <div class="space-y-1.5">
+                <label for="confirm-password" class="block text-[11px] uppercase tracking-widest font-black text-mandasari-gold ml-1">Konfirmasi Password</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-mandasari-gold transition-colors">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    </div>
+                    <input type="password" id="confirm-password" name="confirm-password" required
+                        class="w-full bg-slate-50 border border-slate-100 rounded-2xl py-3.5 pl-12 pr-4 focus:bg-white focus:border-mandasari-gold focus:ring-0 transition-all outline-none text-sm"
+                        placeholder="Ulangi password">
+                </div>
+                <p id="password-match-error" class="text-red-500 text-[10px] font-bold mt-1 hidden italic">Kata sandi tidak cocok!</p>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-mandasari-navy text-white font-bold py-4 rounded-2xl shadow-xl shadow-mandasari-navy/20 hover:bg-slate-800 hover:-translate-y-1 transition-all flex justify-center items-center gap-3 active:scale-95">
+                    Daftar Sekarang
+                    <i data-lucide="arrow-right" class="w-4 h-4 text-mandasari-gold"></i>
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-10 text-center text-sm text-slate-400 font-medium">
+            Sudah menjadi member? 
+            <a href="login.html" class="text-mandasari-navy font-black hover:text-mandasari-gold transition-colors underline underline-offset-4">Masuk di sini</a>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        lucide.createIcons();
+
+        if (Auth.isLoggedIn()) {
+            window.location.href = 'index.html';
+        }
+
+        const form = document.getElementById('register-form');
+        const pass = document.getElementById('password');
+        const confirmPass = document.getElementById('confirm-password');
+        const errorMsg = document.getElementById('password-match-error');
+
+        // Real-time validation
+        confirmPass.addEventListener('keyup', () => {
+            if (confirmPass.value && pass.value !== confirmPass.value) {
+                errorMsg.classList.remove('hidden');
+                confirmPass.classList.add('border-red-200');
+            } else {
+                errorMsg.classList.add('hidden');
+                confirmPass.classList.remove('border-red-200');
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = pass.value;
+            
+            if (password !== confirmPass.value) {
+                errorMsg.classList.remove('hidden');
+                confirmPass.focus();
+                return;
+            }
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            
+            btn.innerHTML = '<i data-lucide="loader" class="w-5 h-5 animate-spin"></i> Menyiapkan Akun...';
+            lucide.createIcons();
+            btn.disabled = true;
+
+            try {
+                const result = await Auth.register(name, email, password);
+                
+                if (result.success) {
+                    Toast.show('Selamat! Akun Mandasari Anda telah siap.', 'success');
+                    await Auth.login(email, password);
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1500);
+                } else {
+                    Toast.show(result.message, 'error');
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                    lucide.createIcons();
+                }
+            } catch (err) {
+                Toast.show('Gagal menghubungi server.', 'error');
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

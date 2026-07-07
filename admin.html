@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans min-h-screen">
+
+    <nav class="w-full py-5 px-8 bg-mandasari-navy text-white shadow-xl border-b-4 border-mandasari-gold">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3">
+                <div class="p-2 bg-mandasari-gold rounded-lg">
+                    <i data-lucide="chef-hat" class="text-mandasari-navy w-6 h-6"></i>
+                </div>
+                <span class="font-serif text-2xl tracking-wide">Mandasari <span class="text-mandasari-gold">Admin</span></span>
+            </a>
+            <button id="logout-btn" class="flex items-center gap-2 px-4 py-2 rounded-full border border-mandasari-gold/50 hover:bg-mandasari-gold hover:text-mandasari-navy transition-all duration-300 font-medium text-sm">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-12 px-6">
+        <div class="mb-10 flex flex-col sm:flex-row justify-between sm:items-end gap-4">
+            <div>
+                <h1 class="font-serif text-4xl mb-2">Panel Kendali Admin</h1>
+                <p class="text-slate-500">Kelola katalog kue, pantau pesanan pelanggan, dan review performa toko.</p>
+            </div>
+            <div class="text-sm font-semibold bg-white px-4 py-2 rounded-full shadow-sm border border-mandasari-gold/20 self-start sm:self-auto">
+                <span id="current-date">Selasa, 7 Juli 2026</span>
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="bg-white border-l-4 border-mandasari-gold p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Total Pembeli</p>
+                        <h3 class="text-3xl font-bold mt-1" id="stat-users">0</h3>
+                    </div>
+                    <i data-lucide="users" class="text-mandasari-gold w-8 h-8 opacity-20"></i>
+                </div>
+            </div>
+            
+            <div class="bg-white border-l-4 border-mandasari-gold p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 uppercase tracking-wider">Pesanan Kue</p>
+                        <h3 class="text-3xl font-bold mt-1" id="stat-orders">0</h3>
+                    </div>
+                    <i data-lucide="cake" class="text-mandasari-gold w-8 h-8 opacity-20"></i>
+                </div>
+            </div>
+
+            <div class="bg-mandasari-navy text-white p-6 rounded-xl shadow-md relative overflow-hidden">
+                <div class="relative z-10">
+                    <p class="text-sm font-medium text-mandasari-gold uppercase tracking-wider">Total Pendapatan</p>
+                    <h3 class="text-3xl font-bold mt-1" id="stat-revenue">Rp 0</h3>
+                </div>
+                <i data-lucide="banknote" class="absolute -bottom-2 -right-2 w-20 h-20 text-white opacity-5"></i>
+            </div>
+        </div>
+
+        <!-- TAB NAVIGATION -->
+        <div class="flex gap-4 mb-8">
+            <button id="btn-tab-orders" class="tab-btn px-6 py-3 rounded-full font-bold text-sm bg-mandasari-navy text-white shadow-lg transition-all" onclick="AdminController.switchTab('orders')">
+                <i data-lucide="shopping-bag" class="inline-block w-4 h-4 mr-2"></i> Kelola Pesanan
+            </button>
+            <button id="btn-tab-products" class="tab-btn px-6 py-3 rounded-full font-bold text-sm bg-white text-mandasari-navy border border-mandasari-navy/20 hover:border-mandasari-navy transition-all" onclick="AdminController.switchTab('products')">
+                <i data-lucide="cookie" class="inline-block w-4 h-4 mr-2"></i> Kelola Produk
+            </button>
+        </div>
+
+        <!-- PANEL: KELOLA PESANAN -->
+        <div id="panel-orders" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h2 class="font-serif text-2xl text-mandasari-navy">Daftar Transaksi Pesanan</h2>
+                <div class="text-[10px] bg-slate-200 text-slate-700 px-3 py-1 rounded-full font-bold uppercase">Real-time DB</div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-slate-400 text-xs uppercase font-bold tracking-widest">
+                        <tr>
+                            <th class="py-4 px-6">ID Transaksi</th>
+                            <th class="py-4 px-6">Pelanggan</th>
+                            <th class="py-4 px-6">Status</th>
+                            <th class="py-4 px-6 text-right">Total Bayar</th>
+                            <th class="py-4 px-6 text-center">Ubah Status</th>
+                            <th class="py-4 px-6 text-center">Kirim WA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-tbody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="6" class="py-10 text-center text-slate-400 font-medium">
+                                <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-mandasari-gold"></i>
+                                Memuat pesanan dari database...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL: KELOLA PRODUK -->
+        <div id="panel-products" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h2 class="font-serif text-2xl text-mandasari-navy">Manajemen Katalog Produk</h2>
+                <button onclick="AdminController.openCreateModal()" class="bg-mandasari-navy text-white px-5 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Tambah Kue Baru
+                </button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50 text-slate-400 text-xs uppercase font-bold tracking-widest">
+                        <tr>
+                            <th class="py-4 px-6">Gambar</th>
+                            <th class="py-4 px-6">Nama Kue</th>
+                            <th class="py-4 px-6">Kategori</th>
+                            <th class="py-4 px-6 text-right">Harga</th>
+                            <th class="py-4 px-6 text-center">Stok</th>
+                            <th class="py-4 px-6 text-center">Diskon / Badge</th>
+                            <th class="py-4 px-6 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-tbody" class="divide-y divide-slate-100">
+                        <tr>
+                            <td colspan="7" class="py-10 text-center text-slate-400 font-medium">
+                                <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-mandasari-gold"></i>
+                                Memuat produk kue...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- PRODUCT MODAL (TAMBAH / EDIT KUE) -->
+    <div id="product-modal" class="fixed inset-0 bg-mandasari-navy/90 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="bg-white rounded-[32px] p-8 max-w-lg w-full shadow-2xl relative overflow-y-auto max-h-[90vh]">
+            <button onclick="AdminController.closeModal()" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="font-serif text-2xl mb-6 text-mandasari-navy" id="modal-title">Tambah Kue Baru</h3>
+            <form id="product-form" class="space-y-4">
+                <input type="hidden" id="prod-id">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-full">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Nama Kue</label>
+                        <input type="text" id="prod-name" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Harga (IDR)</label>
+                        <input type="number" id="prod-price" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Stok Porsi</label>
+                        <input type="number" id="prod-stock" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Kategori</label>
+                        <select id="prod-category" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors">
+                            <option value="Brownies">Brownies</option>
+                            <option value="Cakes">Cakes</option>
+                            <option value="Pastry">Pastry</option>
+                            <option value="Cookies">Cookies</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Badge (Label)</label>
+                        <input type="text" id="prod-badge" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors" placeholder="Best Seller / New / dsb">
+                    </div>
+                    <div class="col-span-full">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">URL Gambar (Image Link)</label>
+                        <input type="url" id="prod-image" required class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Diskon (%)</label>
+                        <input type="number" id="prod-discount" min="0" max="100" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors" value="0">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Rating</label>
+                        <input type="number" id="prod-rating" min="1" max="5" step="0.1" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors" value="5.0">
+                    </div>
+                    <div class="col-span-full">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Deskripsi Kue</label>
+                        <textarea id="prod-description" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm outline-none focus:bg-white focus:border-mandasari-gold transition-colors" placeholder="Jelaskan detail rasa kue..."></textarea>
+                    </div>
+                </div>
+                <div class="pt-4 flex gap-4">
+                    <button type="button" onclick="AdminController.closeModal()" class="w-1/2 border border-slate-200 py-3 rounded-xl font-bold text-slate-500 hover:bg-slate-50 transition-colors">Batal</button>
+                    <button type="submit" class="w-1/2 bg-mandasari-navy text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors">Simpan Kue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOADER -->
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        lucide.createIcons();
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('id-ID', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    </script>
+</body>
+</html>

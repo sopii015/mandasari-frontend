@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran Aman | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans min-h-screen">
+
+    <nav class="w-full py-6 px-8 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl tracking-wide">
+                Mandasari <span class="text-mandasari-gold">Kue</span>
+            </a>
+            <div class="flex items-center gap-2 text-slate-400 text-sm font-medium">
+                <i data-lucide="shield-check" class="w-5 h-5 text-green-500"></i>
+                Pembayaran Enkripsi Aman
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto py-12 px-6">
+        <div class="flex flex-col lg:flex-row gap-12">
+            
+            <div class="flex-grow">
+                <h2 class="font-serif text-3xl mb-8 flex items-center gap-3">
+                    <span class="w-10 h-10 bg-mandasari-navy text-white rounded-full flex items-center justify-center text-sm font-sans">1</span>
+                    Informasi Pengiriman
+                </h2>
+                
+                <form id="checkout-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="col-span-full">
+                            <label class="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">Nama Penerima</label>
+                            <input type="text" id="ship-name" required class="w-full bg-white border border-slate-200 rounded-xl py-4 px-5 focus:ring-2 focus:ring-mandasari-gold outline-none transition-all" placeholder="Masukkan nama lengkap">
+                        </div>
+                        
+                        <div class="col-span-full">
+                            <label class="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">Nomor WhatsApp</label>
+                            <input type="tel" id="ship-phone" required class="w-full bg-white border border-slate-200 rounded-xl py-4 px-5 focus:ring-2 focus:ring-mandasari-gold outline-none transition-all" placeholder="0812xxxx">
+                        </div>
+                        
+                        <div class="col-span-full">
+                            <label class="block text-sm font-bold mb-2 uppercase tracking-wider text-slate-500">Alamat Lengkap</label>
+                            <textarea id="ship-address" required rows="4" class="w-full bg-white border border-slate-200 rounded-xl py-4 px-5 focus:ring-2 focus:ring-mandasari-gold outline-none transition-all" placeholder="Nama jalan, nomor rumah, kec/kel..."></textarea>
+                        </div>
+                    </div>
+
+                    <h2 class="font-serif text-3xl mt-12 mb-8 flex items-center gap-3">
+                        <span class="w-10 h-10 bg-mandasari-navy text-white rounded-full flex items-center justify-center text-sm font-sans">2</span>
+                        Metode Pembayaran
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        <label class="flex items-center p-5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-mandasari-gold transition-all group has-[input:checked]:border-mandasari-gold">
+                            <input type="radio" name="payment" value="Transfer Bank" checked class="w-5 h-5 accent-mandasari-gold">
+                            <div class="ml-4">
+                                <span class="block font-bold">Transfer Bank (Verifikasi Manual)</span>
+                                <span class="text-xs text-slate-400">BCA / Mandiri / BRI</span>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-center p-5 bg-white border-2 border-slate-100 rounded-2xl cursor-pointer hover:border-mandasari-gold transition-all group has-[input:checked]:border-mandasari-gold">
+                            <input type="radio" name="payment" value="E-Wallet" class="w-5 h-5 accent-mandasari-gold">
+                            <div class="ml-4">
+                                <span class="block font-bold">E-Wallet (OVO / GoPay / Dana)</span>
+                                <span class="text-xs text-slate-400">QRIS Tersedia</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-mandasari-navy text-white font-bold py-5 rounded-2xl text-xl mt-10 hover:bg-slate-800 transition-all shadow-xl flex justify-center items-center gap-3">
+                        Konfirmasi Pesanan
+                        <i data-lucide="arrow-right-circle" class="w-6 h-6 text-mandasari-gold"></i>
+                    </button>
+                </form>
+            </div>
+
+            <div class="w-full lg:w-[380px]">
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 sticky top-8 shadow-sm">
+                    <h3 class="font-serif text-xl mb-6">Pesanan Anda</h3>
+                    <div id="checkout-items" class="space-y-4 mb-8"></div>
+                    
+                    <div class="border-t border-slate-100 pt-6 space-y-3">
+                        <div class="flex justify-between text-slate-500">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between text-green-600 font-medium">
+                            <span>Ongkos Kirim</span>
+                            <span>Gratis</span>
+                        </div>
+                        <div class="flex justify-between items-end pt-4 border-t border-slate-100">
+                            <span class="font-serif text-lg">Total</span>
+                            <span class="text-2xl font-bold text-mandasari-navy" id="summary-total">Rp 0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="success-modal" class="fixed inset-0 bg-mandasari-navy/90 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-6">
+        <div class="bg-white rounded-[40px] p-10 max-w-md w-full text-center shadow-2xl transform transition-all">
+            <div class="w-24 h-24 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 animate-bounce">
+                <i data-lucide="check-check" class="w-12 h-12"></i>
+            </div>
+            <h2 class="font-serif text-3xl mb-4">Terima Kasih!</h2>
+            <p class="text-slate-500 mb-8">Pesanan kue Anda sedang kami siapkan dengan penuh cinta.</p>
+            
+            <div class="bg-mandasari-cream rounded-2xl p-5 mb-8 border border-mandasari-gold/20">
+                <span class="text-[10px] uppercase tracking-widest text-slate-400 block mb-1">ID Transaksi</span>
+                <span class="font-mono font-bold text-lg text-mandasari-navy" id="modal-trx-id">MND-2104-XXXX</span>
+            </div>
+            
+            <div class="space-y-4">
+                <a href="orders.html" class="block w-full bg-mandasari-navy text-white font-bold py-4 rounded-xl">Lihat Riwayat Pesanan</a>
+                <a href="index.html" class="block w-full text-sm font-semibold text-mandasari-gold hover:underline">Kembali ke Beranda</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/checkout.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!Auth.isLoggedIn()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const items = Cart.items || [];
+            const user = Auth.getUserAktif();
+
+            if (items.length === 0) {
+                window.location.href = 'products.html';
+                return;
+            }
+
+            if (user) document.getElementById('ship-name').value = user.name;
+
+            const container = document.getElementById('checkout-items');
+            container.innerHTML = items.map(item => `
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-mandasari-cream rounded-xl overflow-hidden flex-none">
+                        <img src="${item.image}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow">
+                        <h4 class="text-sm font-bold line-clamp-1">${item.name}</h4>
+                        <p class="text-xs text-slate-400">${item.quantity} x ${Cart.formatCurrency(item.price)}</p>
+                    </div>
+                    <span class="text-sm font-bold italic">${Cart.formatCurrency(item.price * item.quantity)}</span>
+                </div>
+            `).join('');
+
+            const ringkasan = Cart.hitungRingkasan();
+            document.getElementById('summary-subtotal').textContent = Cart.formatCurrency(ringkasan.subtotal);
+            document.getElementById('summary-total').textContent = Cart.formatCurrency(ringkasan.totalAkhir);
+        });
+
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Memproses Pesanan...';
+            lucide.createIcons();
+            btn.disabled = true;
+
+            const dataPengiriman = {
+                nama: document.getElementById('ship-name').value,
+                hp: document.getElementById('ship-phone').value,
+                alamat: document.getElementById('ship-address').value,
+                catatan: '-'
+            };
+            const metodeBayar = document.querySelector('input[name="payment"]:checked').value;
+
+            const result = await ProsesCheckout.buatPesanan(dataPengiriman, metodeBayar);
+            
+            if (result && result.success) {
+                document.getElementById('modal-trx-id').textContent = result.orderId;
+                document.getElementById('success-modal').classList.remove('hidden');
+                
+                // Buka WhatsApp di tab baru setelah 1.5 detik
+                setTimeout(() => {
+                    if (result.whatsappUrl) {
+                        window.open(result.whatsappUrl, '_blank');
+                    }
+                }, 1500);
+            } else {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

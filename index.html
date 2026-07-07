@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko Kue Mandasari | Kelezatan Premium & Autentik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                        'mandasari-slate': '#475569',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+    <nav id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 py-5 px-6 md:px-12 bg-white/80 backdrop-blur-md border-b border-mandasari-gold/10">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="index.html" class="font-serif text-2xl font-black tracking-tight flex items-center gap-2">
+            Mandasari <span class="text-mandasari-gold underline decoration-1 underline-offset-4">Kue</span>
+        </a>
+
+        <div class="hidden md:flex items-center space-x-10 text-sm font-semibold tracking-wide uppercase">
+            <a href="index.html" class="text-mandasari-gold border-b-2 border-mandasari-gold pb-1">Beranda</a>
+            <a href="products.html" class="hover:text-mandasari-gold transition-colors">Katalog</a>
+            <a href="about.html" class="hover:text-mandasari-gold transition-colors">Tentang Kami</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-6">
+            <a href="cart.html" class="hover:text-mandasari-gold relative">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                <span id="cart-badge-desktop" class="absolute -top-2 -right-2 bg-mandasari-navy text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-white font-bold hidden">0</span>
+            </a>
+            <div class="w-px h-6 bg-slate-200"></div>
+
+            <!-- Tampil kalau BELUM login -->
+            <div id="auth-buttons-group" class="flex items-center space-x-4">
+                <a href="login.html" class="text-sm font-bold">Masuk</a>
+                <a href="register.html" class="bg-mandasari-navy text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg">Daftar</a>
+            </div>
+
+            <!-- Tampil kalau SUDAH login -->
+            <div id="user-profile-dropdown" class="hidden dropdown-container relative">
+                <button class="dropdown-trigger flex items-center gap-2 text-sm font-bold cursor-pointer">
+                    <i data-lucide="user-circle" class="w-6 h-6 text-mandasari-gold"></i>
+                    <span id="display-user-name"></span>
+                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </button>
+                <div class="dropdown-content absolute right-0 mt-3 w-48 bg-white rounded-xl shadow-xl border border-slate-100 py-1 opacity-0 invisible translate-y-2 transition-all duration-300 origin-top-right z-50">
+                    <a href="orders.html" class="block px-4 py-3 text-sm font-semibold hover:bg-mandasari-cream border-b border-slate-50">Riwayat Pesanan</a>
+                    <a href="wishlist.html" class="block px-4 py-3 text-sm font-semibold hover:bg-mandasari-cream border-b border-slate-50">Wishlist Saya</a>
+                    <a href="#" class="action-logout block px-4 py-3 text-sm font-semibold text-red-500 hover:bg-mandasari-cream">Keluar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex md:hidden items-center space-x-5">
+            <a href="cart.html" class="relative text-mandasari-navy">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                <span id="cart-badge-mobile" class="absolute -top-2 -right-2 bg-mandasari-gold text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold hidden">0</span>
+            </a>
+            
+            <div class="relative">
+                <button id="mobile-menu-btn" class="text-mandasari-navy p-1 focus:outline-none">
+                    <i data-lucide="menu" id="menu-icon" class="w-7 h-7"></i>
+                </button>
+
+                <div id="mobile-menu" class="absolute right-0 mt-3 w-40 bg-white rounded-xl shadow-xl border border-slate-100 py-1 opacity-0 invisible scale-95 transition-all duration-300 origin-top-right z-50">
+                    <div class="flex flex-col text-[12px] font-bold text-mandasari-navy tracking-tight">
+                        <a href="index.html" class="px-4 py-3 hover:bg-mandasari-cream text-mandasari-gold">Beranda</a>
+                        <a href="products.html" class="px-4 py-3 hover:bg-mandasari-cream border-t border-slate-50">Katalog</a>
+                        <a href="about.html" class="px-4 py-3 hover:bg-mandasari-cream border-t border-slate-50">Tentang Kami</a>
+                        <div class="h-px bg-slate-100 mx-4"></div>
+
+                        <!-- Tampil kalau BELUM login -->
+                        <div id="mobile-auth-buttons-group">
+                            <a href="login.html" class="block px-4 py-3 hover:bg-mandasari-cream">Masuk</a>
+                            <a href="register.html" class="block px-4 py-3 hover:bg-mandasari-cream">Daftar</a>
+                        </div>
+
+                        <!-- Tampil kalau SUDAH login -->
+                        <div id="mobile-user-profile-group" class="hidden">
+                            <a href="orders.html" class="block px-4 py-3 hover:bg-mandasari-cream">Riwayat Pesanan</a>
+                            <a href="wishlist.html" class="block px-4 py-3 hover:bg-mandasari-cream">Wishlist Saya</a>
+                            <a href="#" class="action-logout block px-4 py-3 text-red-500 hover:bg-mandasari-cream">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+    <main class="flex-grow pt-16">
+    <style>
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-16px); }
+        }
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-image-wrap {
+            animation: float-gentle 6s ease-in-out infinite;
+        }
+        .hero-fade-1 { animation: fade-up 0.8s ease-out both; }
+        .hero-fade-2 { animation: fade-up 0.8s ease-out 0.15s both; }
+        .hero-fade-3 { animation: fade-up 0.8s ease-out 0.3s both; }
+        .hero-fade-4 { animation: fade-up 0.8s ease-out 0.45s both; }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-image-wrap, .hero-fade-1, .hero-fade-2, .hero-fade-3, .hero-fade-4 {
+                animation: none;
+            }
+        }
+    </style>
+
+    <section class="relative px-6 md:px-24 py-16 md:py-24 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        
+        <div class="relative z-10">
+           <span class="hero-fade-1 inline-block text-mandasari-gold text-xs font-bold tracking-[0.4em] uppercase mb-6">
+                Handmade with Love since 2024
+            </span>
+    
+            <h1 class="hero-fade-2 font-serif text-5xl md:text-7xl font-bold leading-[1.1] mb-8 text-mandasari-navy">
+                Kelezatan <br>
+                <span class="text-mandasari-gold italic font-normal">Sempurna.</span>
+            </h1>
+    
+            <p class="hero-fade-3 text-mandasari-slate text-lg md:text-xl mb-12 max-w-xl leading-relaxed font-light">
+                 Nikmati pilihan kue premium mulai dari Brownies Lumer hingga Kue Basah tradisional yang dibuat dengan bahan pilihan terbaik untuk momen spesial Anda.
+            </p>
+    
+            <div class="hero-fade-4 flex flex-wrap items-center gap-6">
+                <a href="products.html" class="bg-mandasari-navy text-white px-10 py-4 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl hover:-translate-y-1">
+                    Pesan Sekarang
+                </a>
+                <a href="#kategori" class="flex items-center gap-3 font-bold text-sm uppercase tracking-widest text-mandasari-navy hover:text-mandasari-gold transition-colors group">
+                    Lihat Menu <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="relative flex justify-center lg:justify-end">
+            <div class="hero-image-wrap relative w-full max-w-xl">
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-mandasari-navy/25 blur-2xl rounded-full"></div>
+                <img src="img/hero-cake.png" 
+                     alt="Kue premium Mandasari" 
+                     class="relative w-full object-contain drop-shadow-2xl">
+            </div>
+        </div>
+    </section>
+
+        <section id="kategori" class="py-24 bg-white border-y border-slate-100">
+            <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                <div class="text-center mb-16">
+                    <h2 class="font-serif text-4xl font-bold mb-4">Kategori Pilihan</h2>
+                    <div class="w-20 h-1 bg-mandasari-gold mx-auto"></div>
+                </div>
+        
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <a href="products.html?cat=Brownies" class="group p-8 rounded-[32px] bg-mandasari-cream border border-transparent hover:border-mandasari-gold hover:bg-white hover:shadow-xl transition-all text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm group-hover:scale-110 transition-transform">
+                        <i data-lucide="cake" class="w-8 h-8 text-mandasari-gold"></i>
+                    </div>
+                    <span class="font-bold text-sm uppercase tracking-widest">Brownies</span>
+                </a>
+
+                <a href="products.html?cat=Cakes" class="group p-8 rounded-[32px] bg-mandasari-cream border border-transparent hover:border-mandasari-gold hover:bg-white hover:shadow-xl transition-all text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm group-hover:scale-110 transition-transform">
+                        <i data-lucide="dessert" class="w-8 h-8 text-mandasari-gold"></i>
+                    </div>
+                    <span class="font-bold text-sm uppercase tracking-widest">Cakes</span>
+                </a>
+
+                <a href="products.html?cat=Pastry" class="group p-8 rounded-[32px] bg-mandasari-cream border border-transparent hover:border-mandasari-gold hover:bg-white hover:shadow-xl transition-all text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm group-hover:scale-110 transition-transform">
+                        <i data-lucide="croissant" class="w-8 h-8 text-mandasari-gold"></i>
+                    </div>
+                    <span class="font-bold text-sm uppercase tracking-widest">Pastry</span>
+                </a>
+
+                <a href="products.html?cat=Cookies" class="group p-8 rounded-[32px] bg-mandasari-cream border border-transparent hover:border-mandasari-gold hover:bg-white hover:shadow-xl transition-all text-center">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm group-hover:scale-110 transition-transform">
+                        <i data-lucide="cookie" class="w-8 h-8 text-mandasari-gold"></i>
+                    </div>
+                    <span class="font-bold text-sm uppercase tracking-widest">Cookies</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+        <section class="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
+                <div class="text-center md:text-left">
+                    <h2 class="font-serif text-4xl font-bold mb-2 text-mandasari-navy">Produk Terlaris</h2>
+                    <p class="text-mandasari-slate font-light">Pilihan favorit para pecinta manis.</p>
+                </div>
+                <a href="products.html" class="group flex items-center gap-3 font-bold text-sm uppercase tracking-widest text-mandasari-gold">
+                    Lihat Semua <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+
+            <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="animate-pulse bg-slate-100 h-96 rounded-[32px]"></div>
+                <div class="animate-pulse bg-slate-100 h-96 rounded-[32px]"></div>
+                <div class="animate-pulse bg-slate-100 h-96 rounded-[32px]"></div>
+                <div class="animate-pulse bg-slate-100 h-96 rounded-[32px]"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-mandasari-navy text-white pt-20 pb-10 px-6 md:px-24">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16">
+        
+        <div class="space-y-6">
+            <h2 class="font-serif text-3xl font-bold tracking-tight">
+                Mandasari <span class="text-mandasari-gold text-4xl">.</span>
+            </h2>
+            <p class="text-slate-400 font-light leading-relaxed max-w-xs">
+                Menyajikan kebahagiaan dalam setiap gigitan. Dibuat dengan resep keluarga turun-temurun dan bahan-bahan premium berkualitas tinggi.
+            </p>
+            <div class="flex space-x-5">
+                <a href="#" class="text-slate-400 hover:text-mandasari-gold transition-colors">
+                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-mandasari-gold transition-colors">
+                    <i data-lucide="facebook" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-slate-400 hover:text-mandasari-gold transition-colors">
+                    <i data-lucide="twitter" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <h4 class="font-bold uppercase tracking-[0.2em] text-xs text-mandasari-gold mb-8">Navigasi</h4>
+            <ul class="space-y-4 text-sm font-medium tracking-wide">
+                <li><a href="products.html" class="text-slate-300 hover:text-white transition-colors">Semua Kue</a></li>
+                <li><a href="orders.html" class="text-slate-300 hover:text-white transition-colors">Lacak Pesanan</a></li>
+                <li><a href="about.html" class="text-slate-300 hover:text-white transition-colors">Tentang Kami</a></li>
+                <li><a href="login.html" class="text-slate-300 hover:text-white transition-colors">Akun Saya</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-bold uppercase tracking-[0.2em] text-xs text-mandasari-gold mb-8">Hubungi Kami</h4>
+            <ul class="space-y-4 text-sm text-slate-300 font-light">
+                <li class="flex items-start gap-3">
+                    <i data-lucide="map-pin" class="w-5 h-5 text-mandasari-gold shrink-0"></i>
+                    <span>Jl. Melati No. 15, RT 02 RW 05 Kel. Kebon Jeruk, Kec. Kebon Jeruk Kota Jakarta Barat, DKI Jakarta
+                    11530</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <i data-lucide="phone" class="w-5 h-5 text-mandasari-gold shrink-0"></i>
+                    <span>0857-7315-3093</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <i data-lucide="mail" class="w-5 h-5 text-mandasari-gold shrink-0"></i>
+                    <span>hello@mandasari.com</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-slate-500 text-[10px] font-bold uppercase tracking-[0.3em]">
+            &copy; 2026 TOKO KUE MANDASARI. ALL RIGHTS RESERVED.
+        </p>
+    </div>
+</footer>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/wishlist.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Memastikan icon lucide ter-render di awal
+        lucide.createIcons();
+    </script>
+   <script>
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('menu-icon');
+
+    // Toggle Menu
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !mobileMenu.classList.contains('invisible');
+        
+        if (isOpen) {
+            closeMenu();
+        } else {
+            mobileMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+            mobileMenu.classList.add('opacity-100', 'visible', 'scale-100');
+            menuIcon.setAttribute('data-lucide', 'x');
+        }
+        if(window.lucide) lucide.createIcons();
+    });
+
+    function closeMenu() {
+        mobileMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+        mobileMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+        menuIcon.setAttribute('data-lucide', 'menu');
+        if(window.lucide) lucide.createIcons();
+    }
+
+    // Klik di mana saja untuk nutup menu
+    document.addEventListener('click', () => closeMenu());
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang Belanja | Toko Kue Mandasari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mandasari-navy': '#0A192F',
+                        'mandasari-gold': '#C5A059',
+                        'mandasari-cream': '#F9F6F0',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-mandasari-cream text-mandasari-navy font-sans min-h-screen flex flex-col">
+
+    <nav class="fixed w-full top-0 z-50 bg-mandasari-navy text-white shadow-lg border-b-2 border-mandasari-gold py-4 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="index.html" class="font-serif text-2xl tracking-wide flex items-center gap-2">
+                Mandasari <span class="text-mandasari-gold">Kue</span>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="products.html" class="hover:text-mandasari-gold transition-colors text-sm font-medium">Katalog</a>
+                <div id="user-display" class="flex items-center gap-2 border-l border-white/20 pl-6">
+                    <i data-lucide="user" class="w-5 h-5 text-mandasari-gold"></i>
+                    <span id="user-greeting" class="text-sm font-semibold"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-32 pb-16 px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        <div class="flex items-center gap-4 mb-10">
+            <h1 class="font-serif text-4xl">Keranjang Belanja</h1>
+            <div class="h-1 flex-grow bg-mandasari-gold/20 rounded-full"></div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-10">
+            <div class="flex-grow">
+                <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm" id="cart-container"></div>
+            </div>
+
+            <div class="w-full lg:w-96 flex-none" id="summary-container" style="display: none;">
+                <div class="bg-mandasari-navy text-white rounded-3xl p-8 sticky top-32 shadow-xl border-t-4 border-mandasari-gold">
+                    <h2 class="font-serif text-2xl mb-6 border-b border-white/10 pb-4 text-mandasari-gold">Ringkasan Pesanan</h2>
+                    
+                    <div class="space-y-4 text-sm mb-8">
+                        <div class="flex justify-between text-white/70">
+                            <span>Subtotal</span>
+                            <span id="summary-subtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between font-bold text-lg border-t border-white/10 pt-4">
+                            <span>Total Bayar</span>
+                            <span id="summary-total" class="text-mandasari-gold text-2xl font-serif">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <a href="checkout.html" class="w-full bg-mandasari-gold text-mandasari-navy font-bold py-4 rounded-xl type-button flex justify-center items-center gap-2 hover:bg-yellow-500 transition-all transform hover:-translate-y-1">
+                        Lanjutkan Pembayaran
+                        <i data-lucide="credit-card" class="w-5 h-5"></i>
+                    </a>
+                    
+                    <a href="products.html" class="w-full text-center block mt-6 text-sm text-white/50 hover:text-mandasari-gold transition-colors">
+                        Kembali Pilih Kue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+
+    <script>
+        lucide.createIcons();
+
+        if (!Auth.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        const renderCart = () => {
+            const container = document.getElementById('cart-container');
+            const summaryContainer = document.getElementById('summary-container');
+            const items = Cart.items || [];
+            
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="py-20 text-center">
+                        <div class="w-24 h-24 bg-mandasari-cream rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="shopping-bag" class="w-12 h-12 text-mandasari-gold"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl mb-2">Keranjang Anda Kosong</h3>
+                        <p class="text-slate-500 mb-8">Sepertinya Anda belum memilih kue lezat untuk hari ini.</p>
+                        <a href="products.html" class="bg-mandasari-navy text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800 transition-all">Mulai Belanja</a>
+                    </div>
+                `;
+                summaryContainer.style.display = 'none';
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <div class="flex flex-col md:flex-row items-center gap-6 py-6 border-b border-slate-100 last:border-0 group">
+                    <div class="w-28 h-28 rounded-2xl overflow-hidden bg-mandasari-cream flex-none">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h4 class="font-serif text-xl mb-1">${item.name}</h4>
+                        <p class="text-mandasari-gold font-semibold">${Cart.formatCurrency(item.price)}</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-mandasari-cream px-4 py-2 rounded-full border border-mandasari-gold/20">
+                        <button onclick="updateQty(${item.id}, -1)" class="hover:text-mandasari-gold"><i data-lucide="minus" class="w-4 h-4"></i></button>
+                        <span class="w-8 text-center font-bold">${item.quantity}</span>
+                        <button onclick="updateQty(${item.id}, 1)" class="hover:text-mandasari-gold"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                    </div>
+                    <div class="text-right min-w-[120px]">
+                        <p class="font-bold text-lg">${Cart.formatCurrency(item.price * item.quantity)}</p>
+                        <button onclick="removeItem(${item.id})" class="text-red-400 hover:text-red-600 text-sm flex items-center gap-1 mt-2 justify-end">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            summaryContainer.style.display = 'block';
+            const ringkasan = Cart.hitungRingkasan();
+            document.getElementById('summary-subtotal').textContent = Cart.formatCurrency(ringkasan.subtotal);
+            document.getElementById('summary-total').textContent = Cart.formatCurrency(ringkasan.totalAkhir);
+            
+            lucide.createIcons();
+        };
+
+        window.updateQty = (id, change) => {
+            const item = Cart.items.find(i => i.id === id);
+            if(item) {
+                Cart.updateJumlah(id, item.quantity + change);
+            }
+        };
+
+        window.removeItem = (id) => {
+            Cart.hapusItem(id);
+        };
+
+        window.addEventListener('update-tampilan-keranjang', renderCart);
+        renderCart();
+    </script>
+</body>
+</html>
