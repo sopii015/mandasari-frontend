@@ -155,33 +155,41 @@
                 return;
             }
 
-            const items = Cart.items || [];
-            const user = Auth.getUserAktif();
+            const checkCartAndRender = () => {
+                const items = Cart.items || [];
+                const user = Auth.getUserAktif();
 
-            if (items.length === 0) {
-                window.location.href = 'products.html';
-                return;
+                if (items.length === 0) {
+                    window.location.href = 'products.html';
+                    return;
+                }
+
+                if (user) document.getElementById('ship-name').value = user.name;
+
+                const container = document.getElementById('checkout-items');
+                container.innerHTML = items.map(item => `
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-mandasari-cream rounded-xl overflow-hidden flex-none">
+                            <img src="${item.image}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="text-sm font-bold line-clamp-1">${item.name}</h4>
+                            <p class="text-xs text-slate-400">${item.quantity} x ${Cart.formatCurrency(item.price)}</p>
+                        </div>
+                        <span class="text-sm font-bold italic">${Cart.formatCurrency(item.price * item.quantity)}</span>
+                    </div>
+                `).join('');
+
+                const ringkasan = Cart.hitungRingkasan();
+                document.getElementById('summary-subtotal').textContent = Cart.formatCurrency(ringkasan.subtotal);
+                document.getElementById('summary-total').textContent = Cart.formatCurrency(ringkasan.totalAkhir);
+            };
+
+            if (Cart.loaded) {
+                checkCartAndRender();
+            } else {
+                window.addEventListener('update-tampilan-keranjang', checkCartAndRender);
             }
-
-            if (user) document.getElementById('ship-name').value = user.name;
-
-            const container = document.getElementById('checkout-items');
-            container.innerHTML = items.map(item => `
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 bg-mandasari-cream rounded-xl overflow-hidden flex-none">
-                        <img src="${item.image}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex-grow">
-                        <h4 class="text-sm font-bold line-clamp-1">${item.name}</h4>
-                        <p class="text-xs text-slate-400">${item.quantity} x ${Cart.formatCurrency(item.price)}</p>
-                    </div>
-                    <span class="text-sm font-bold italic">${Cart.formatCurrency(item.price * item.quantity)}</span>
-                </div>
-            `).join('');
-
-            const ringkasan = Cart.hitungRingkasan();
-            document.getElementById('summary-subtotal').textContent = Cart.formatCurrency(ringkasan.subtotal);
-            document.getElementById('summary-total').textContent = Cart.formatCurrency(ringkasan.totalAkhir);
         });
 
         document.getElementById('checkout-form').addEventListener('submit', async (e) => {

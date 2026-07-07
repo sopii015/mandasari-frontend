@@ -4,7 +4,7 @@
 
 const ProsesCheckout = {
     init: () => {
-        if (Cart.items.length === 0) {
+        if (Cart.loaded && Cart.items.length === 0) {
             Toast.show('Keranjang Anda masih kosong', 'warning');
             setTimeout(() => window.location.href = 'index.html', 2000);
         }

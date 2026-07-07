@@ -4,12 +4,14 @@
 
 const KeranjangMandasari = {
     items: [],
+    loaded: false,
 
     init: async () => {
         if (Auth.isLoggedIn()) {
             await KeranjangMandasari.muatCart();
         } else {
             KeranjangMandasari.items = [];
+            KeranjangMandasari.loaded = true;
             KeranjangMandasari.perbaruiBadgeNavigasi();
         }
     },
@@ -22,11 +24,13 @@ const KeranjangMandasari = {
             if (response.ok) {
                 const data = await response.json();
                 KeranjangMandasari.items = data;
+                KeranjangMandasari.loaded = true;
                 KeranjangMandasari.perbaruiBadgeNavigasi();
                 window.dispatchEvent(new CustomEvent('update-tampilan-keranjang'));
             }
         } catch (error) {
             console.error("Gagal memuat keranjang dari backend:", error);
+            KeranjangMandasari.loaded = true;
         }
     },
 
