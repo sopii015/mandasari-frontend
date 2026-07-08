@@ -40,6 +40,6 @@ Karena proyek ini menggunakan Fetch API untuk mengambil data dari file `products
 
 Aplikasi ini telah dideploy secara online dan dapat diakses secara publik melalui tautan berikut:
 
-👉 **https://sopii015.github.io/Sopia_Salsabila_UTS_WEB2/**
+👉 **[https://sopii015.github.io/mandasari-frontend/](https://sopii015.github.io/mandasari-frontend/)**
 
 ---
